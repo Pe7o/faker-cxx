@@ -35,6 +35,21 @@ TEST_F(HelperTest, RegexpStyleStringParse)
     ASSERT_EQ(result.size(), 11);
 }
 
+TEST_F(HelperTest, RegexpStyleStringParseRepetition)
+{
+    std::string input = "/{1,2}[7-9]TemP{1,4}[4-8]";
+    std::string result = Helper::regexpStyleStringParse(input);
+    ASSERT_TRUE(7 <= result.size() && result.size() <= 11);
+}
+
+TEST_F(HelperTest, RegexpStyleStringParseRepetitionSwitchedMinMax)
+{
+    std::string input = "[0-9]{2,1}Ate{4,1}xY[9-1]";
+    std::string result = Helper::regexpStyleStringParse(input);
+    std::cout << result << std::endl;
+    ASSERT_TRUE(7 <= result.size() && result.size() <= 11);
+}
+
 TEST_F(HelperTest, ReplaceCreditCardSymbols)
 {
     // Test with the default format "6453-####-####-####-###L"

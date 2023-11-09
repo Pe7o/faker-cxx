@@ -1,14 +1,18 @@
 #include "faker-cxx/Airline.h"
-#include "gtest/gtest.h"
 
 #include <algorithm>
+#include <regex>
 #include <string>
 
+#include "gtest/gtest.h"
+
 #include "data/AircraftTypes.h"
-#include "data/Airplanes.h"
 #include "data/Airlines.h"
+#include "data/Airplanes.h"
 #include "data/Airports.h"
 #include "data/Seat.h"
+#include "faker-cxx/Number.h"
+#include "faker-cxx/String.h"
 
 using namespace ::testing;
 using namespace faker;
@@ -131,4 +135,72 @@ TEST_F(AirlineTest, shouldGenerateSeatNumberWidebody) {
         aircraftTypeSeatLetters.at(Airline::AircraftType::Widebody),
         [generatedSeatNumber](char letter) { return generatedSeatNumber.back() == letter; }
         ));
+}
+
+TEST_F(AirlineTest, shouldGenerateFlightNumberWithoutLeadingZeros)
+{
+    const std::regex flightNumberRegex("^[1-9][0-9]*$");
+    auto length = unsigned (faker::Number::integer(2, 100));
+    const std::string flightNumber = Airline::flightNumber(false, length);
+    ASSERT_TRUE(std::regex_match(flightNumber, flightNumberRegex) && flightNumber.length() == length);
+}
+
+TEST_F(AirlineTest, shouldGenerateFakeFlightNumberWithoutLeadingZeros)
+{
+    const std::regex flightNumberRegex("^[1-9][0-9]*$");
+    auto length = unsigned (faker::Number::integer(2, 100));
+    const std::string flightNumber = Airline::fakeFlightNumber(false, length);
+    ASSERT_TRUE(std::regex_match(flightNumber, flightNumberRegex) && flightNumber.length() == length);
+}
+
+TEST_F(AirlineTest, shouldGenerateFlightNumberWithLeadingZeros)
+{
+    const std::regex flightNumberRegex("^[0-9]+$");
+    auto length = unsigned (faker::Number::integer(2, 100));
+    const std::string flightNumber = Airline::flightNumber(true, length);
+    ASSERT_TRUE(std::regex_match(flightNumber, flightNumberRegex) && flightNumber.length() == length);
+}
+
+TEST_F(AirlineTest, shouldGenerateFakeFlightNumberWithLeadingZeros)
+{
+    const std::regex flightNumberRegex("^[0-9]+$");
+    auto length = unsigned (faker::Number::integer(2, 100));
+    const std::string flightNumber = Airline::fakeFlightNumber(true, length);
+    ASSERT_TRUE(std::regex_match(flightNumber, flightNumberRegex) && flightNumber.length() == length);
+}
+
+TEST_F(AirlineTest, shouldGenerateFlightNumberInRangeWithoutLeadingZeros)
+{
+    const std::regex flightNumberRegex("^[1-9][0-9]*$");
+    auto min = unsigned (faker::Number::integer(2, 100)) - 1;
+    auto max = unsigned (faker::Number::integer((int) min, 100)) + 1;
+    const std::string flightNumber = Airline::flightNumber(false, Airline::Range{min, max});
+    ASSERT_TRUE(std::regex_match(flightNumber, flightNumberRegex) && min <= flightNumber.length() && flightNumber.length() <= max);
+}
+
+TEST_F(AirlineTest, shouldGenerateFakeFlightNumberInRangeWithoutLeadingZeros)
+{
+    const std::regex flightNumberRegex("^[1-9][0-9]*$");
+    auto min = unsigned (faker::Number::integer(2, 100)) - 1;
+    auto max = unsigned (faker::Number::integer((int) min, 100)) + 1;
+    const std::string flightNumber = Airline::fakeFlightNumber(false, Airline::Range{min, max});
+    ASSERT_TRUE(std::regex_match(flightNumber, flightNumberRegex) && min <= flightNumber.length() && flightNumber.length() <= max);
+}
+
+TEST_F(AirlineTest, shouldGenerateFlightNumberInRangeWithLeadingZeros)
+{
+    const std::regex flightNumberRegex("^[0-9]+$");
+    auto min = unsigned (faker::Number::integer(2, 100)) - 1;
+    auto max = unsigned (faker::Number::integer((int) min, 100)) + 1;
+    const std::string flightNumber = Airline::flightNumber(true, Airline::Range{min, max});
+    ASSERT_TRUE(std::regex_match(flightNumber, flightNumberRegex) && min <= flightNumber.length() && flightNumber.length() <= max);
+}
+
+TEST_F(AirlineTest, shouldGenerateFakeFlightNumberInRangeWithLeadingZeros)
+{
+    const std::regex flightNumberRegex("^[0-9]+$");
+    auto min = unsigned (faker::Number::integer(2, 100)) - 1;
+    auto max = unsigned (faker::Number::integer((int) min, 100)) + 1;
+    const std::string flightNumber = Airline::fakeFlightNumber(true, Airline::Range{min, max});
+    ASSERT_TRUE(std::regex_match(flightNumber, flightNumberRegex) && min <= flightNumber.length() && flightNumber.length() <= max);
 }

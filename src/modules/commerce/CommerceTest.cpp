@@ -193,3 +193,27 @@ TEST_F(CommerceTest, shouldGenerateIsbn10)
     ASSERT_EQ(generatedIsbn10.size(), 10);
     ASSERT_TRUE(sum % 11 == 0);
 }
+
+TEST_F(CommerceTest, shouldGenerateIsbn10EndingX)
+{
+    std::string isbn;
+    do {
+        isbn = Commerce::ISBN10();
+    } while (isbn.back() != 'X');
+
+    unsigned sum = 10, weight = 10;
+    for (size_t i = 0; i < 9; i++) {
+        sum += (unsigned)(isbn[i] - '0') * weight;
+        weight--;
+    }
+
+    ASSERT_TRUE(sum % 11 == 0 && isbn.size() == 10);
+}
+
+TEST_F(CommerceTest, shouldGenerateIsbn10ContainingMaxOneXAtBack)
+{
+    for (size_t i = 0; i < 250; i++) {
+        const std::string isbn = Commerce::ISBN10();
+        ASSERT_FALSE(isbn.find('X') < isbn.length() - 1);
+    }
+}

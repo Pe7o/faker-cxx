@@ -54,11 +54,35 @@ std::string Airline::flightNumber(bool addLeadingZeros, unsigned int length) {
     return String::numeric(length, false);
 }
 
+std::string fakeNumeric(unsigned length, bool addLeadingZeros) {
+    if (addLeadingZeros) {
+        return "0" + String::numeric(length-1);
+    }
+
+    return "1" + String::numeric(length-1);
+}
+
+std::string Airline::fakeFlightNumber(bool addLeadingZeros, unsigned int length) {
+    if (addLeadingZeros) {
+        return fakeNumeric(length, true);
+    }
+
+    return fakeNumeric(length, false);
+}
+
 std::string Airline::flightNumber(bool addLeadingZeros, Airline::Range length) {
     if (addLeadingZeros) {
         return String::numeric(Number::integer(length.min, length.max), true);
     }
 
     return String::numeric(Number::integer(length.min, length.max), false);
+}
+
+std::string Airline::fakeFlightNumber(bool addLeadingZeros, Airline::Range length) {
+    if (addLeadingZeros) {
+        return fakeNumeric(Number::integer(length.min, length.max), true);
+    }
+
+    return fakeNumeric(Number::integer(length.min, length.max), false);
 }
 }

@@ -116,6 +116,8 @@ public:
      */
     static std::string flightNumber(bool addLeadingZeros = false, unsigned int length = 4);
 
+    static std::string fakeFlightNumber(bool addLeadingZeros = false, unsigned int length = 4);
+
     struct Range {
         unsigned int min;
         unsigned int max;
@@ -136,5 +138,6 @@ public:
      * @endcode
      */
     static std::string flightNumber(bool addLeadingZeros = false, Range length = {1, 4});
+    static std::string fakeFlightNumber(bool addLeadingZeros = false, Range length = {1, 4});
 };
 }
