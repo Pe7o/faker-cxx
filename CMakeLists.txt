@@ -5,7 +5,7 @@ project(${PROJECT_NAME} CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
-set(COMPILE_FLAGS "--coverage -g -O0")
+#set(COMPILE_FLAGS "--coverage -g -O0")
 
 option(BUILD_FAKER_TESTS DEFAULT ON)
 
