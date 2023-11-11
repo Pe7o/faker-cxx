@@ -46,7 +46,6 @@ TEST_F(HelperTest, RegexpStyleStringParseRepetitionSwitchedMinMax)
 {
     std::string input = "[0-9]{2,1}Ate{4,1}xY[9-1]";
     std::string result = Helper::regexpStyleStringParse(input);
-    std::cout << result << std::endl;
     ASSERT_TRUE(7 <= result.size() && result.size() <= 11);
 }
 
