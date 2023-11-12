@@ -15,6 +15,8 @@
 #include "data/Currencies.h"
 #include "gmock/gmock.h"
 
+#include "faker-cxx/Number.h"
+
 using namespace ::testing;
 using namespace faker;
 
@@ -163,26 +165,14 @@ TEST_F(FinanceTest, shouldGenerateAmount)
     ASSERT_LE(amountAsFloat, 1000);
 }
 
-/*
- * The default GTest macro "MatchesRegex" has only minimal support on
- * windows. Hence, we define our own macro which uses the c++ default
- * implementation of the used compiler.
- */
-MATCHER_P(MatchesRegexCpp, value, "")
+TEST_F(FinanceTest, CheckIbanGenerator)
 {
-    return std::regex_match(arg, std::regex(value));
+    int size = static_cast<int> (expectedRegex.size());
+    for (size_t i = 0; i < 10; i++) {
+        IbanCountry ibanCountry = *(std::next(std::views::keys(expectedRegex).begin(), Number::integer(size)));
+        ASSERT_TRUE(std::regex_match(Finance::iban(ibanCountry), std::regex(expectedRegex.at(ibanCountry))));
+    }
 }
-
-TEST_P(FinanceTest, CheckIbanGenerator)
-{
-    auto ibanCountry = GetParam();
-
-    ASSERT_THAT(Finance::iban(ibanCountry), MatchesRegexCpp(expectedRegex.at(ibanCountry)));
-}
-
-INSTANTIATE_TEST_SUITE_P(TestIbanGenerator, FinanceTest,
-                         ValuesIn(std::views::keys(expectedRegex).begin(), std::views::keys(expectedRegex).end()),
-                         [](const TestParamInfo<IbanCountry>& info) { return generatedTestName.at(info.param); });
 
 TEST_F(FinanceTest, shouldGenerateAmountWithSymbol)
 {

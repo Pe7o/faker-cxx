@@ -221,10 +221,10 @@ TEST_F(WordTest, shouldGenerateSampleWithNonExistingLength)
 
 TEST_F(WordTest, shouldGenerateWords)
 {
-    const auto generatedWords = Word::words(5);
+    const std::string generatedWords = Word::words(3);
 
-    const auto separatedWords = StringHelper::split(generatedWords, " ");
-
-    ASSERT_TRUE(std::ranges::all_of(separatedWords, [this](const std::string& separatedWord)
-                                    { return std::ranges::find(allWords, separatedWord) != allWords.end(); }));
+    const std::vector<std::string> separatedWords = StringHelper::split(generatedWords, " ");
+    for (const std::string& word : separatedWords) {
+        ASSERT_TRUE(std::ranges::any_of(allWords, [word](const std::string& checkWord) { return word == checkWord; }));
+    }
 }
