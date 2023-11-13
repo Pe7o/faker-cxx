@@ -167,7 +167,7 @@ TEST_F(FinanceTest, shouldGenerateAmount)
 
 TEST_F(FinanceTest, CheckIbanGenerator)
 {
-    int size = static_cast<int> (expectedRegex.size());
+    int size = static_cast<int> (expectedRegex.size()) - 1;
     for (size_t i = 0; i < 10; i++) {
         IbanCountry ibanCountry = *(std::next(std::views::keys(expectedRegex).begin(), Number::integer(size)));
         ASSERT_TRUE(std::regex_match(Finance::iban(ibanCountry), std::regex(expectedRegex.at(ibanCountry))));
